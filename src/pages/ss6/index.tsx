@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 type Props = {
@@ -11,8 +12,12 @@ export default function SS6Index({ data1, youtubes }: Props) {
       <div>SS6Index</div>
       <div className="text-red-500">{JSON.stringify(data1)}</div>
       <ul>
-        {youtubes.map((e) => (
-          <li key={e.id}>{e.title}</li>
+        {youtubes.map(({ id, title }) => (
+          <li key={id}>
+            <Link href="ss6/1">
+              <span className="text-yellow-400">{id}</span> | {title}
+            </Link>
+          </li>
         ))}
       </ul>
     </div>
