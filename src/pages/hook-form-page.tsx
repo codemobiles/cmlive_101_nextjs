@@ -10,8 +10,11 @@ interface User {
 }
 const defaultUser: User = { username: "kan", password: "555" };
 const formValidateSchema = Yup.object().shape({
-  username: Yup.string().required("Username is required").trim(),
-  password: Yup.string().required("Password is required").trim(),
+  username: Yup.string()
+    .required("Username is required")
+    .email("Must be email format")
+    .trim(),
+  password: Yup.string().required("Password is required").min(8).trim(),
 });
 
 export default function HookFormPage({}: Props) {
@@ -29,13 +32,21 @@ export default function HookFormPage({}: Props) {
   return (
     <div className="border-2 w-[200px]">
       <h1>HookForm Demo</h1>
+      <hr />
       <form onSubmit={handleSubmit((value) => alert(JSON.stringify(value)))}>
         {/* Username */}
         <Controller
           control={control}
           name="username"
           render={({ field }) => (
-            <input {...field} type="text" placeholder="Username" />
+            <div>
+              <input {...field} type="text" placeholder="Username" />
+              {errors.username?.message && (
+                <span className="text-red-700">
+                  Error! : {errors.username?.message}
+                </span>
+              )}
+            </div>
           )}
         />
         <br />
@@ -44,7 +55,14 @@ export default function HookFormPage({}: Props) {
           control={control}
           name="password"
           render={({ field }) => (
-            <input {...field} type="text" placeholder="Password" />
+            <div>
+              <input {...field} type="text" placeholder="Password" />
+              {errors.password?.message && (
+                <span className="text-red-700">
+                  Error! : {errors.password?.message}
+                </span>
+              )}
+            </div>
           )}
         />
         <br />
