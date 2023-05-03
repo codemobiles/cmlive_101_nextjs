@@ -1,31 +1,43 @@
-import React, { useState } from "react";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
 
 type Props = {};
 interface User {
   username: string;
   password: string;
 }
+const defaultUser: User = { username: "kan", password: "555" };
 
 export default function HookFormPage({}: Props) {
-  const defaultUser: User = { username: "lek", password: "1234" };
-  const [user, setUser] = useState<User>(defaultUser);
+  // prepare hook form variables
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<User>({
+    defaultValues: defaultUser,
+  });
 
   return (
     <div className="border-2 w-[200px]">
       <h1>HookForm Demo</h1>
-      <form onSubmit={() => alert(JSON.stringify(user))}>
-        <input
-          type="text"
-          value={user.username}
-          placeholder="Username"
-          onChange={(e) => setUser({ ...user, username: e.target.value })}
+      <form onSubmit={handleSubmit((value) => alert(JSON.stringify(value)))}>
+        {/* Username */}
+        <Controller
+          control={control}
+          name="username"
+          render={({ field }) => (
+            <input {...field} type="text" placeholder="Username" />
+          )}
         />
         <br />
-        <input
-          type="text"
-          value={user.password}
-          placeholder="Password"
-          onChange={(e) => setUser({ ...user, password: e.target.value })}
+        {/* Password */}
+        <Controller
+          control={control}
+          name="password"
+          render={({ field }) => (
+            <input {...field} type="text" placeholder="Password" />
+          )}
         />
         <br />
         <button type="submit">Submit</button>
