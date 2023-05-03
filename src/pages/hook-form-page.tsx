@@ -1,5 +1,7 @@
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 type Props = {};
 interface User {
@@ -7,15 +9,21 @@ interface User {
   password: string;
 }
 const defaultUser: User = { username: "kan", password: "555" };
+const formValidateSchema = Yup.object().shape({
+  username: Yup.string().required("Username is required").trim(),
+  password: Yup.string().required("Password is required").trim(),
+});
 
 export default function HookFormPage({}: Props) {
   // prepare hook form variables
   const {
+    reset,
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<User>({
     defaultValues: defaultUser,
+    resolver: yupResolver(formValidateSchema),
   });
 
   return (
@@ -40,7 +48,14 @@ export default function HookFormPage({}: Props) {
           )}
         />
         <br />
-        <button type="submit">Submit</button>
+        <br />
+        <button type="submit">Submit</button> |{" "}
+        <button
+          type="button"
+          onClick={() => reset({ username: "", password: "" })}
+        >
+          Clear
+        </button>
       </form>
     </div>
   );
