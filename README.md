@@ -12,3 +12,6 @@
 
 # install hook form package
 yarn add react-hook-form yup @hookform/resolvers
+
+# install redux toolkit package
+yarn add react-redux @reduxjs/toolkit redux
